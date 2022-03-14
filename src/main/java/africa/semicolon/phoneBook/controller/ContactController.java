@@ -10,11 +10,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/contact")
 public class ContactController {
-    private AddContactService addContactService = new AddContactServiceImpl();
+     AddContactService addContactService = new AddContactServiceImpl();
 
     @PostMapping("/register")
     public AddContactResponse addNewContact(@RequestBody AddContactRequest requests){
         return addContactService.save(requests);
+    }
+
+    @DeleteMapping("/{contact}")
+    public void deleteContact(@RequestBody AddContactRequest requests){
+        addContactService.delete(requests);
     }
 
     @GetMapping("/{name}")
