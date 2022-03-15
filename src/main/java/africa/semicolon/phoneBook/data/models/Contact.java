@@ -1,17 +1,21 @@
 package africa.semicolon.phoneBook.data.models;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @Document("Contacts")
 public class Contact {
+   @ Id
+    private String id;
+
+
     @NonNull
     private String firstName;
     @NonNull
