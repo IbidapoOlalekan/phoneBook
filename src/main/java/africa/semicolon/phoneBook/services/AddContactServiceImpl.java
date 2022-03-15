@@ -17,9 +17,12 @@ public class AddContactServiceImpl implements AddContactService{
     @Override
     public AddContactResponse save(AddContactRequest requests) {
             Contact contact = new Contact(requests.getFirstName(),requests.getLastName(),requests.getMobile());
-            contactRepository.saveContact(contact);
+            Contact savedContact = contactRepository.saveContact(contact);
+            AddContactResponse response = new AddContactResponse();
+            response.setFullName(savedContact.getFirstName() + " " + savedContact.getLastName());
+            response.setMobile(savedContact.getMobile());
 
-;        return null;
+;        return response;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class AddContactServiceImpl implements AddContactService{
 
         FindUserResponse response = new FindUserResponse();
         response.setFullName(contact.getFirstName() +" " + contact.getLastName());
+        response.setMobileNumber(contact.getMobile());
         return response;
     }
 
@@ -51,6 +55,7 @@ public class AddContactServiceImpl implements AddContactService{
 
         FindUserResponse response = new FindUserResponse();
         response.setMobileNumber(contact.getMobile());
+        response.setFullName(contact.getFirstName() + " " + contact.getLastName());
         return response;
     }
 }

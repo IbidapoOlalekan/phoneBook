@@ -24,7 +24,7 @@ public class ContactController {
 
     @GetMapping("/{name}")
     public FindUserResponse findUserByName(@PathVariable String name){return addContactService.findUserByName(name);}
-
-    @GetMapping("/{mobile}")
-    public FindUserResponse findUserByMobile(@PathVariable String mobile){return addContactService.findUserByMobile(mobile);}
+//
+//    @GetMapping("/{mobile}")
+//    public FindUserResponse findUserByMobile(@PathVariable String mobile){return addContactService.findUserByMobile(mobile);}
 }
