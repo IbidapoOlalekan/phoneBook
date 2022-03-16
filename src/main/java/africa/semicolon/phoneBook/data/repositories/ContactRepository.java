@@ -5,9 +5,13 @@ import africa.semicolon.phoneBook.dtos.requests.AddContactRequest;
 import africa.semicolon.phoneBook.dtos.responses.AddContactResponse;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
+
 public interface ContactRepository extends MongoRepository<Contact, String> {
-    Contact findContactByFirstName(String firstName);
-    Contact findContactByFirstNameOrLastName(String name);
+    List<Contact> findContactByFirstName(String firstName);
+    Contact findContactByFirstNameAndLastName(String firstName, String lastName);
+    List<Contact> findContactByFirstNameOrLastName(String name);
+    List<Contact> findContactByLastName(String lastName);
     Contact findContactByMobile(String mobile);
 
 }

@@ -6,26 +6,24 @@ import africa.semicolon.phoneBook.dtos.requests.AddContactRequest;
 import africa.semicolon.phoneBook.dtos.responses.AddContactResponse;
 import africa.semicolon.phoneBook.dtos.responses.FindUserResponse;
 import africa.semicolon.phoneBook.exceptions.ContactNotFoundException;
+import africa.semicolon.phoneBook.utils.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class AddContactServiceImpl implements AddContactService{
     @Autowired
-    ContactRepository contactRepository;
+    private ContactRepository contactRepository;
+
+
     @Override
     public AddContactResponse save(AddContactRequest requests) {
-            Contact contact = new Contact(requests.getFirstName(),requests.getLastName(),requests.getMobile());
+            Contact contact = ModelMapper.map(requests);
             Contact savedContact = contactRepository.save(contact);
-            AddContactResponse response = new AddContactResponse();
-            response.setFullName(savedContact.getFirstName() + " " + savedContact.getLastName());
-            response.setMobile(savedContact.getMobile());
-
-;        return response;
+;            return ModelMapper.map(savedContact);
     }
 
     @Override
@@ -33,16 +31,25 @@ public class AddContactServiceImpl implements AddContactService{
         return contactRepository;
     }
 
-    @Override
-    public FindUserResponse findUserByName(String name) {
-        name = name.toLowerCase();
-        Contact contact  = contactRepository.findContactByFirstNameOrLastName(name);
-        if (contact == null) throw new ContactNotFoundException(name + "not found");
+    private List<Contact> findContactByFirstNameOrLastName(String name){
+        List<Contact> contacts = new ArrayList<>();
+        contacts.addAll(contactRepository.findContactByFirstName(name));
+        contacts.addAll(contactRepository.findContactByLastName(name));
+        return contacts;
+    }
 
-        FindUserResponse response = new FindUserResponse();
-        response.setFullName(contact.getFirstName() +" " + contact.getLastName());
-        response.setMobileNumber(contact.getMobile());
-        return response;
+    @Override
+    public List<FindUserResponse> findUserByName(String name) {
+        List<Contact> contacts  = findContactByFirstNameOrLastName(name);
+        if (contacts.isEmpty()) throw new ContactNotFoundException(name + "not found");
+        List <FindUserResponse> responses = new ArrayList<>();
+        contacts.forEach(contact-> {
+            responses.add(new FindUserResponse(contact));
+            responses.add(ModelMapper.contactToFindContactResponse(contact));
+//            response.setFullName(contact.getFirstName() + " " + contact.getLastName());
+//            response.setMobileNumber(contact.getMobile());
+        });
+      return responses;
     }
 
     @Override

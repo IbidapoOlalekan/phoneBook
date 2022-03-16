@@ -1,19 +1,19 @@
 package africa.semicolon.phoneBook.services;
 
 import africa.semicolon.phoneBook.data.repositories.ContactRepository;
-import africa.semicolon.phoneBook.data.repositories.ContactRepositoryImpl;
+
 import africa.semicolon.phoneBook.dtos.requests.AddContactRequest;
 import africa.semicolon.phoneBook.dtos.responses.FindUserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddContactServiceImplTest {
-    ContactRepository contactRepository;
-    @BeforeEach void setUp(){
-        contactRepository = new ContactRepositoryImpl();
-    }
+    @Autowired
+    AddContactService contactService;
+
 
     @Test void testThatAContactCanBeAdded() {
         //given that
@@ -42,7 +42,7 @@ class AddContactServiceImplTest {
         requests.setLastName("Ola");
         requests.setMobile("08124884392");
         addContactService.save(requests);
-        FindUserResponse response = addContactService.findUserByName("Lekan");
+        FindUserResponse response = (FindUserResponse) addContactService.findUserByName("Lekan");
 
         assertEquals("Lekan Ola",response.getFullName());
     }
