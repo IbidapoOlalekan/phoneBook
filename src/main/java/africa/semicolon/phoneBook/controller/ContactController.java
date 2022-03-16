@@ -24,13 +24,25 @@ public class ContactController {
     private AddContactService addContactService ;
 
     @PostMapping("/register")
-    public AddContactResponse addNewContact(@RequestBody AddContactRequest requests){
-        return addContactService.save(CaseUtil.filter(requests));
+    public ResponseEntity<?> addNewContact(@RequestBody AddContactRequest requests){
+        try {
+            return new ResponseEntity<>(addContactService.save(CaseUtil.filter(requests)), HttpStatus.CREATED);
+        }
+        catch (RuntimeException e){
+            return new ResponseEntity<>(new ApiResponse(false,e.getMessage()), HttpStatus.FOUND);
+        }
     }
 
     @DeleteMapping("/delete")
-    public void deleteContact(@RequestBody AddContactRequest requests){
-        addContactService.delete(requests);
+    public ResponseEntity<?> deleteContact(@RequestBody AddContactRequest requests){
+        try {
+            addContactService.delete(requests);
+            return new ResponseEntity<>(new ApiResponse(true,"Deleted Successfully"),HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @GetMapping("/{keyword}")
