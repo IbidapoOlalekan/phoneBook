@@ -41,7 +41,7 @@ public class AddContactServiceImpl implements AddContactService{
     @Override
     public List<FindUserResponse> findUserByName(String name) {
         List<Contact> contacts  = findContactByFirstNameOrLastName(name);
-        if (contacts.isEmpty()) throw new ContactNotFoundException(name + "not found");
+        if (contacts.isEmpty()) throw new ContactNotFoundException(name + " not found");
         List <FindUserResponse> responses = new ArrayList<>();
         contacts.forEach(contact-> {
             responses.add(new FindUserResponse(contact));
