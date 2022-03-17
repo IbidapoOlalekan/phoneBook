@@ -21,9 +21,10 @@ public class AddContactServiceImpl implements AddContactService{
 
     @Override
     public AddContactResponse save(AddContactRequest requests) {
+
             Contact contact = ModelMapper.map(requests);
             Contact savedContact = contactRepository.save(contact);
-;            return ModelMapper.map(savedContact);
+            return ModelMapper.map(savedContact);
     }
 
     @Override
@@ -46,8 +47,6 @@ public class AddContactServiceImpl implements AddContactService{
         contacts.forEach(contact-> {
             responses.add(new FindUserResponse(contact));
             responses.add(ModelMapper.contactToFindContactResponse(contact));
-//            response.setFullName(contact.getFirstName() + " " + contact.getLastName());
-//            response.setMobileNumber(contact.getMobile());
         });
       return responses;
     }
